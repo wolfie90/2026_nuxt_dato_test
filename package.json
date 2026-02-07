@@ -18,6 +18,7 @@
     "@datocms/cda-client": "^0.2.9",
     "@datocms/cma-client": "^5.2.0",
     "@mux/mux-player": "^3.10.1",
+    "@nuxtjs/i18n": "^10.2.3",
     "datocms-structured-text-to-plain-text": "^5.1.7",
     "gql.tada": "^1.9.0",
     "highlight.js": "^11.11.1",

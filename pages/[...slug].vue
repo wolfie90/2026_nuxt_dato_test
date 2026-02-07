@@ -16,7 +16,7 @@
       :renderBlock="renderBlock"
     />
 
-    <footer>Published at {{ data.page._firstPublishedAt }}</footer>
+    <footer>{{ $t('site.publishedAt', { date: data.page._firstPublishedAt }) }}</footer>
   </div>
 </template>
 
@@ -41,16 +41,21 @@ import {
 import { useQuery } from '~/composables/useQuery';
 import { query, type StructuredTextBlock, type StructuredTextRecord } from './query';
 
+const { locale, t } = useI18n();
 const route = useRoute();
-const slug = route.params.slug as string;
+const slugParts = Array.isArray(route.params.slug) ? route.params.slug : [route.params.slug];
+const slug = slugParts[slugParts.length - 1] as string;
+const localePath = useLocalePath();
 
-const data = await useQuery(query, { variables: { slug } });
+const data = await useQuery(query, { variables: { slug, locale: locale.value as any } });
+
+console.log('data', data.value);
 
 // Handle non-existing pages with 404
 if (!data.value?.page) {
   throw createError({
     statusCode: 404,
-    statusMessage: 'Page Not Found',
+    statusMessage: t('site.pageNotFound'),
     fatal: true,
   });
 }
@@ -82,7 +87,8 @@ const customNodeRules = [
 const renderInlineRecord = ({ record }: RenderInlineRecordContext<StructuredTextRecord>) => {
   switch (record.__typename) {
     case 'PageRecord': {
-      return h(NuxtLink, { href: `/${record.slug}`, class: 'pill' }, () => record.title);
+      const path = record.parent?.slug ? `/${record.parent.slug}/${record.slug}` : `/${record.slug}`;
+      return h(NuxtLink, { href: localePath(path), class: 'pill' }, () => record.title);
     }
   }
 };
@@ -98,7 +104,8 @@ const renderLinkToRecord = ({
 }: RenderRecordLinkContext<StructuredTextRecord>) => {
   switch (record.__typename) {
     case 'PageRecord': {
-      return h(NuxtLink, { href: `/${record.slug}` }, () => children);
+      const path = record.parent?.slug ? `/${record.parent.slug}/${record.slug}` : `/${record.slug}`;
+      return h(NuxtLink, { href: localePath(path) }, () => children);
     }
   }
 };

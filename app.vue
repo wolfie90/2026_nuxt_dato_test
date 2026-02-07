@@ -1,9 +1,10 @@
 <template>
   <header>
-    <h1>DatoCMS + Nuxt Starter Kit</h1>
+    <h1>{{ $t('site.title') }}</h1>
     <nav>
-      <a href="https://www.datocms.com/docs/nuxt"> 📚 Full Integration Guide </a>
+      <a href="https://www.datocms.com/docs/nuxt"> {{ $t('site.guide') }} </a>
     </nav>
+    <LanguageSwitch />
     <DraftModeToggler />
   </header>
   <main><NuxtPage /></main>
@@ -13,7 +14,7 @@
 import { toHead } from 'vue-datocms';
 import { TagFragment } from './lib/datocms/commonFragments';
 import { graphql } from './lib/datocms/graphql';
-import { DraftModeToggler } from '#components';
+import { DraftModeToggler, LanguageSwitch } from '#components';
 
 const query = graphql(
   /* GraphQL */ `

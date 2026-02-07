@@ -1,0 +1,13 @@
+{
+  "site": {
+    "title": "DatoCMS + Nuxt Starter Kit",
+    "guide": "📚 Volledige Integratie Gids",
+    "publishedAt": "Gepubliceerd op {date}",
+    "pageNotFound": "Pagina niet gevonden"
+  },
+  "language": {
+    "switch": "Taal",
+    "nl": "Nederlands",
+    "en": "Engels"
+  }
+}

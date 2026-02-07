@@ -12,13 +12,16 @@ import { type ResultOf, graphql } from '~/lib/datocms/graphql';
  */
 export const query = graphql(
   /* GraphQL */ `
-    query BasicPageQuery($slug: String!) {
-      page(filter: { slug: { eq: $slug } }) {
+    query BasicPageQuery($slug: String!, $locale: SiteLocale) {
+      page(filter: { slug: { eq: $slug } }, locale: $locale) {
         _seoMetaTags {
           ...TagFragment
         }
         title
         _firstPublishedAt
+        parent {
+          slug(locale: $locale)
+        }
         structuredText {
           value
           blocks {
@@ -44,6 +47,9 @@ export const query = graphql(
             ... on PageRecord {
               title
               slug
+              parent {
+                slug(locale: $locale)
+              }
             }
           }
         }

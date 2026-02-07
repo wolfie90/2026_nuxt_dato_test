@@ -2,6 +2,20 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
   devtools: { enabled: true },
+  modules: ['@nuxtjs/i18n'],
+  i18n: {
+    locales: [
+      { code: 'nl', language: 'nl-NL', name: 'Nederlands', file: 'nl.json' },
+      { code: 'en', language: 'en-US', name: 'English', file: 'en.json' },
+    ],
+    defaultLocale: 'nl',
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',
+    },
+  },
   app: {
     head: {
       link: [
@@ -32,6 +46,7 @@ export default defineNuxtConfig({
   routeRules: {
     // Redirect root to home page
     '/': { redirect: { to: '/home', statusCode: 302 } },
+    '/en': { redirect: { to: '/en/home', statusCode: 302 } },
     // Add cors headers on API routes
     '/api/**': { cors: true },
   },
