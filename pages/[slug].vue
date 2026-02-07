@@ -82,7 +82,7 @@ const customNodeRules = [
 const renderInlineRecord = ({ record }: RenderInlineRecordContext<StructuredTextRecord>) => {
   switch (record.__typename) {
     case 'PageRecord': {
-      return h(NuxtLink, { href: `/page/${record.slug}`, class: 'pill' }, () => record.title);
+      return h(NuxtLink, { href: `/${record.slug}`, class: 'pill' }, () => record.title);
     }
   }
 };
@@ -98,7 +98,7 @@ const renderLinkToRecord = ({
 }: RenderRecordLinkContext<StructuredTextRecord>) => {
   switch (record.__typename) {
     case 'PageRecord': {
-      return h(NuxtLink, { href: `/page/${record.slug}` }, () => children);
+      return h(NuxtLink, { href: `/${record.slug}` }, () => children);
     }
   }
 };

@@ -32,6 +32,12 @@ export type Page = ItemTypeDefinition<
     seo_analysis: {
       type: 'json';
     };
+    position: {
+      type: 'integer';
+    };
+    parent_id: {
+      type: 'string';
+    };
   }
 >;
 export type ImageBlock = ItemTypeDefinition<

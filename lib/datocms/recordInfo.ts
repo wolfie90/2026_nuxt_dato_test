@@ -29,7 +29,7 @@ export function recordToWebsiteRoute(
   switch (itemTypeId) {
     // Page model
     case 'JdG722SGTSG_jEB1Jx-0XA': {
-      return `/page/${item.attributes.slug}`;
+      return `/${item.attributes.slug}`;
     }
     default:
       return null;

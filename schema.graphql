@@ -2473,6 +2473,8 @@ input PageModelFilter {
   _createdAt: CreatedAtFilter
   id: ItemIdFilter
   _firstPublishedAt: PublishedAtFilter
+  parent: ParentFilter
+  position: PositionFilter
   _publicationScheduledAt: PublishedAtFilter
   _unpublishingScheduledAt: PublishedAtFilter
   _publishedAt: PublishedAtFilter
@@ -2495,6 +2497,8 @@ enum PageModelOrderBy {
   id_DESC
   _firstPublishedAt_ASC
   _firstPublishedAt_DESC
+  position_ASC
+  position_DESC
   _publicationScheduledAt_ASC
   _publicationScheduledAt_DESC
   _unpublishingScheduledAt_ASC
@@ -2540,12 +2544,53 @@ type PageRecord implements RecordInterface {
   _status: ItemStatus!
   _unpublishingScheduledAt: DateTime
   _updatedAt: DateTime!
+  children: [PageRecord!]!
   id: ItemId!
+  parent: PageRecord
+  position: IntType
   seoAnalysis: JsonField
   seoSettingsSocial: SeoField
   slug: String!
   structuredText: PageModelStructuredTextField!
   title: String!
+}
+
+"""Specifies how to filter by parent (tree-like collections only)"""
+input ParentFilter {
+  """
+  Filter records children of the specified record. Value must be a Record ID
+  """
+  eq: ItemId
+
+  """Filter records with a parent record or not"""
+  exists: BooleanType
+}
+
+"""Specifies how to filter by position (sorted and tree-like collections)"""
+input PositionFilter {
+  """
+  Filter records with a value that's strictly greater than the one specified
+  """
+  gt: IntType
+
+  """Filter records with a value that's less than the one specified"""
+  lt: IntType
+
+  """
+  Filter records with a value that's greater than or equal to the one specified
+  """
+  gte: IntType
+
+  """
+  Filter records with a value that's less or equal than the one specified
+  """
+  lte: IntType
+
+  """Search for records with an exact match"""
+  eq: IntType
+
+  """Exclude records with an exact match"""
+  neq: IntType
 }
 
 """Specifies how to filter by publication datetime"""
@@ -2629,7 +2674,7 @@ type Query {
     """Limit the number of results"""
     first: IntType = 20
     filter: PageModelFilter
-    orderBy: [PageModelOrderBy] = [_updatedAt_DESC]
+    orderBy: [PageModelOrderBy] = [position_ASC]
   ): [PageRecord!]!
 
   """Returns a collection of assets"""
@@ -2661,7 +2706,7 @@ type Query {
     """
     fallbackLocales: [SiteLocale!]
     filter: PageModelFilter
-    orderBy: [PageModelOrderBy] = [_updatedAt_DESC]
+    orderBy: [PageModelOrderBy] = [position_ASC]
   ): PageRecord
 
   """Returns a specific asset"""
