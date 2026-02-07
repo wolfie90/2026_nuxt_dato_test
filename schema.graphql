@@ -295,6 +295,104 @@ type GlobalSeoField {
   twitterAccount: String
 }
 
+union HomeModelStructuredTextBlocksField = ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
+
+type HomeModelStructuredTextField {
+  blocks: [HomeModelStructuredTextBlocksField!]!
+  inlineBlocks: [String!]!
+  links: [PageRecord!]!
+  value: JsonField!
+}
+
+type HomeModelStructuredTextFieldNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: HomeModelStructuredTextField!
+}
+
+"""Record of type 📝 Home (home)"""
+type HomeRecord implements RecordInterface {
+  _allSeoAnalysisLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [JsonFieldMultiLocaleField!]
+  _allSeoSettingsSocialLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [SeoFieldMultiLocaleField!]
+  _allStructuredTextLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [HomeModelStructuredTextFieldNonNullMultiLocaleField!]
+  _allTitleLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringNonNullMultiLocaleField!]
+  _createdAt: DateTime!
+
+  """Editing URL"""
+  _editingUrl: String
+  _firstPublishedAt: DateTime!
+  _isValid: BooleanType!
+  _locales: [SiteLocale!]!
+  _modelApiKey: String!
+  _publicationScheduledAt: DateTime
+  _publishedAt: DateTime!
+
+  """Generates SEO and Social card meta tags to be used in your frontend"""
+  _seoMetaTags(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+  ): [Tag!]!
+  _status: ItemStatus!
+  _unpublishingScheduledAt: DateTime
+  _updatedAt: DateTime!
+  id: ItemId!
+  seoAnalysis(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): JsonField
+  seoSettingsSocial(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): SeoField
+  structuredText(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): HomeModelStructuredTextField!
+  title(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String!
+}
+
 """Block of type 🌅 Image (image_block)"""
 type ImageBlockRecord implements RecordInterface {
   _createdAt: DateTime!
@@ -2444,12 +2542,31 @@ enum ItemStatus {
 
 scalar JsonField
 
+type JsonFieldMultiLocaleField {
+  locale: SiteLocale
+  value: JsonField
+}
+
 """Specifies how to filter JSON fields"""
 input JsonFilter {
   """
   Filter records with the specified field defined (i.e. with any value) or not
   """
   exists: BooleanType
+}
+
+"""Specifies how to filter by locale"""
+input LocalesFilter {
+  """Filter records that are localized in all the specified locales"""
+  allIn: [SiteLocale!]
+
+  """
+  Filter records that are localized in at least one of the specified locales
+  """
+  anyIn: [SiteLocale!]
+
+  """Filter records that are not localized in any of the specified locales"""
+  notIn: [SiteLocale!]
 }
 
 scalar MetaTagAttributes
@@ -2481,6 +2598,7 @@ input PageModelFilter {
   _status: StatusFilter
   _updatedAt: UpdatedAtFilter
   _isValid: BooleanFilter
+  _locales: LocalesFilter
   seoAnalysis: JsonFilter
   seoSettingsSocial: SeoFilter
   slug: SlugFilter
@@ -2524,14 +2642,50 @@ type PageModelStructuredTextField {
   value: JsonField!
 }
 
+type PageModelStructuredTextFieldNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: PageModelStructuredTextField!
+}
+
 """Record of type 📝 Page (page)"""
 type PageRecord implements RecordInterface {
+  _allSeoAnalysisLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [JsonFieldMultiLocaleField!]
+  _allSeoSettingsSocialLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [SeoFieldMultiLocaleField!]
+  _allSlugLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringNonNullMultiLocaleField!]
+  _allStructuredTextLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [PageModelStructuredTextFieldNonNullMultiLocaleField!]
+  _allTitleLocales(
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): [StringNonNullMultiLocaleField!]
   _createdAt: DateTime!
 
   """Editing URL"""
   _editingUrl: String
   _firstPublishedAt: DateTime!
   _isValid: BooleanType!
+  _locales: [SiteLocale!]!
   _modelApiKey: String!
   _publicationScheduledAt: DateTime
   _publishedAt: DateTime!
@@ -2548,11 +2702,51 @@ type PageRecord implements RecordInterface {
   id: ItemId!
   parent: PageRecord
   position: IntType
-  seoAnalysis: JsonField
-  seoSettingsSocial: SeoField
-  slug: String!
-  structuredText: PageModelStructuredTextField!
-  title: String!
+  seoAnalysis(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): JsonField
+  seoSettingsSocial(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): SeoField
+  slug(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String!
+  structuredText(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): PageModelStructuredTextField!
+  title(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): String!
 }
 
 """Specifies how to filter by parent (tree-like collections only)"""
@@ -2696,6 +2890,17 @@ type Query {
     orderBy: [UploadOrderBy] = [_createdAt_DESC]
   ): [FileField!]!
 
+  """Returns the single instance record"""
+  home(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+  ): HomeRecord
+
   """Returns a specific record"""
   page(
     """The locale to use to fetch the field's content"""
@@ -2789,6 +2994,11 @@ type SeoField {
   twitterCard: String
 }
 
+type SeoFieldMultiLocaleField {
+  locale: SiteLocale
+  value: SeoField
+}
+
 """Specifies how to filter SEO meta tags fields"""
 input SeoFilter {
   """
@@ -2817,6 +3027,7 @@ type Site {
 }
 
 enum SiteLocale {
+  nl
   en
 }
 
@@ -2890,6 +3101,11 @@ input StringMatchesFilter {
   pattern: String!
   caseSensitive: BooleanType = false
   regexp: BooleanType = true
+}
+
+type StringNonNullMultiLocaleField {
+  locale: SiteLocale
+  value: String!
 }
 
 """Specifies how to filter Structured Text fields values"""

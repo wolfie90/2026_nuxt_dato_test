@@ -44,9 +44,6 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    // Redirect root to home page
-    '/': { redirect: { to: '/home', statusCode: 302 } },
-    '/en': { redirect: { to: '/en/home', statusCode: 302 } },
     // Add cors headers on API routes
     '/api/**': { cors: true },
   },
