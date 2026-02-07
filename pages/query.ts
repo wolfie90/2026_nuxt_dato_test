@@ -19,8 +19,16 @@ export const query = graphql(
         }
         title
         _firstPublishedAt
+        _allSlugLocales {
+          locale
+          value
+        }
         parent {
           slug(locale: $locale)
+          _allSlugLocales {
+            locale
+            value
+          }
         }
         structuredText {
           value

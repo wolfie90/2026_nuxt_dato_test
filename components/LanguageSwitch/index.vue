@@ -4,7 +4,7 @@
     <NuxtLink
       v-for="locale in availableLocales"
       :key="locale.code"
-      :to="switchLocalePath(locale.code)"
+      :to="getLocalePath(locale.code)"
       :class="[
         'language-switch__link',
         { 'language-switch__link--active': locale.code === currentLocale },
@@ -18,8 +18,18 @@
 <script setup lang="ts">
 const { locale: currentLocale, locales } = useI18n();
 const switchLocalePath = useSwitchLocalePath();
+const alternateLocales = useAlternateLocales();
+const localePath = useLocalePath();
 
 const availableLocales = computed(() => locales.value.filter((l) => typeof l !== 'string'));
+
+const getLocalePath = (localeCode: string) => {
+  const alternatePath = alternateLocales.value[localeCode];
+  if (alternatePath) {
+    return localePath(alternatePath, localeCode);
+  }
+  return switchLocalePath(localeCode);
+};
 </script>
 
 <style scoped>

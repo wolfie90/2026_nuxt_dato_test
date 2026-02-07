@@ -45,8 +45,12 @@ import {
 
 const { locale, t } = useI18n();
 const localePath = useLocalePath();
+const alternateLocales = useAlternateLocales();
 
 const data = await useQuery(homeQuery, { variables: { locale: locale.value as any } });
+
+// Homepage alternate paths are always the root
+alternateLocales.value = { nl: '/', en: '/' };
 
 // Handle missing home page with 404
 if (!data.value?.home) {

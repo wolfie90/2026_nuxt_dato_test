@@ -47,9 +47,22 @@ const slugParts = Array.isArray(route.params.slug) ? route.params.slug : [route.
 const slug = slugParts[slugParts.length - 1] as string;
 const localePath = useLocalePath();
 
+const alternateLocales = useAlternateLocales();
+
 const data = await useQuery(query, { variables: { slug, locale: locale.value as any } });
 
-console.log('data', data.value);
+// Build alternate locale paths from DatoCMS _allSlugLocales
+if (data.value?.page) {
+  const paths: Record<string, string> = {};
+  const allSlugs = (data.value.page as any)._allSlugLocales || [];
+  const parentAllSlugs = (data.value.page as any).parent?._allSlugLocales || [];
+
+  for (const { locale: loc, value: locSlug } of allSlugs) {
+    const parentSlug = parentAllSlugs.find((p: any) => p.locale === loc)?.value;
+    paths[loc] = parentSlug ? `/${parentSlug}/${locSlug}` : `/${locSlug}`;
+  }
+  alternateLocales.value = paths;
+}
 
 // Handle non-existing pages with 404
 if (!data.value?.page) {
