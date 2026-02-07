@@ -19,9 +19,7 @@
 const { locale: currentLocale, locales } = useI18n();
 const switchLocalePath = useSwitchLocalePath();
 
-const availableLocales = computed(() =>
-  locales.value.filter((l) => typeof l !== 'string'),
-);
+const availableLocales = computed(() => locales.value.filter((l) => typeof l !== 'string'));
 </script>
 
 <style scoped>
@@ -41,7 +39,9 @@ const availableLocales = computed(() =>
   border-radius: 0.25rem;
   text-decoration: none;
   color: inherit;
-  transition: background-color 0.2s, opacity 0.2s;
+  transition:
+    background-color 0.2s,
+    opacity 0.2s;
   opacity: 0.7;
 }
 
