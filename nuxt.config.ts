@@ -2,7 +2,11 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/i18n'],
+  modules: ['@nuxtjs/i18n', '@nuxtjs/tailwindcss'],
+  css: ['~/assets/css/main.css'],
+  tailwindcss: {
+    cssPath: false,
+  },
   i18n: {
     locales: [
       { code: 'nl', language: 'nl-NL', name: 'Nederlands', file: 'nl.json' },
@@ -20,8 +24,17 @@ export default defineNuxtConfig({
     head: {
       link: [
         {
+          rel: 'preconnect',
+          href: 'https://fonts.googleapis.com',
+        },
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.gstatic.com',
+          crossorigin: '',
+        },
+        {
           rel: 'stylesheet',
-          href: 'https://cdn.jsdelivr.net/gh/datocms/nextjs-starter-kit/src/app/global.css',
+          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
         },
       ],
     },

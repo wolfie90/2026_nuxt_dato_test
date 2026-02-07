@@ -1,14 +1,18 @@
 <template>
   <div v-if="data?.home">
-    <h1>{{ data.home.title }}</h1>
+    <LayoutGrid>
+      <LayoutColumn>
+        <h1>{{ data.home.title }}</h1>
 
-    <StructuredText
-      :data="data.home.structuredText"
-      :customNodeRules="customNodeRules"
-      :renderInlineRecord="renderInlineRecord"
-      :renderLinkToRecord="renderLinkToRecord"
-      :renderBlock="renderBlock"
-    />
+        <StructuredText
+          :data="data.home.structuredText"
+          :customNodeRules="customNodeRules"
+          :renderInlineRecord="renderInlineRecord"
+          :renderLinkToRecord="renderLinkToRecord"
+          :renderBlock="renderBlock"
+        />
+      </LayoutColumn>
+    </LayoutGrid>
 
     <footer>{{ $t('site.publishedAt', { date: data.home._firstPublishedAt }) }}</footer>
   </div>
